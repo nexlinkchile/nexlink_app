@@ -6,12 +6,14 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Iniciando seed...');
 
+  await prisma.direccionEnvio.deleteMany();
   await prisma.compra.deleteMany();
   await prisma.eventoEmpresa.deleteMany();
   await prisma.user.deleteMany();
   await prisma.colaborador.deleteMany();
   await prisma.producto.deleteMany();
   await prisma.evento.deleteMany();
+  await prisma.banner.deleteMany();
   await prisma.empresa.deleteMany();
 
   const hash = await bcrypt.hash('password', 10);
@@ -113,30 +115,25 @@ async function main() {
   // ─── Eventos ──────────────────────────────────────────────────────────────
   await prisma.evento.createMany({
     data: [
-      { id: 'ev1', empresaId: 'e3', nombre: 'Samsung Tech Flash #9', descripcion: 'Descuentos exclusivos de hasta 45% en los mejores productos Samsung. Televisores, tablets, smartphones y más.', fechaInicio: new Date('2024-11-10T09:00:00'), fechaFin: new Date('2024-11-13T23:59:59'), estado: 'activo', destacado: true, tipo: 'flash', maxComprasPorColaborador: 2, totalVisitas: 2840, totalCompras: 512, montoTotal: 198400000, colaboradoresUnicos: 1028 },
-      { id: 'ev2', empresaId: 'e4', nombre: 'Falabella Moda & Hogar', descripcion: 'Liquidación de temporada en moda, hogar y electrodomésticos. Hasta 50% de descuento en miles de productos.', fechaInicio: new Date('2024-11-08T09:00:00'), fechaFin: new Date('2024-11-16T23:59:59'), estado: 'activo', destacado: true, tipo: 'flash', maxComprasPorColaborador: 3, totalVisitas: 4210, totalCompras: 1291, montoTotal: 124800000, colaboradoresUnicos: 2340 },
-      { id: 'ev3', empresaId: 'e5', nombre: 'Cencosud Gourmet Week', descripcion: 'Semana especial con los mejores productos gourmet, vinos premium y alimentos de alta gama.', fechaInicio: new Date('2024-11-20T09:00:00'), fechaFin: new Date('2024-11-25T23:59:59'), estado: 'proximo', destacado: true, tipo: 'flash', maxComprasPorColaborador: 5 },
-      { id: 'ev4', empresaId: 'e6', nombre: 'Latam Travel Benefits', descripcion: 'Beneficios exclusivos en pasajes, upgrades y servicios premium para colaboradores.', fechaInicio: new Date('2024-12-01T09:00:00'), fechaFin: new Date('2024-12-05T23:59:59'), estado: 'proximo', destacado: false, tipo: 'flash', maxComprasPorColaborador: 2 },
-      { id: 'ev5', empresaId: 'e3', nombre: 'Samsung Back to School', descripcion: 'Notebooks, tablets y accesorios Samsung para el regreso a clases.', fechaInicio: new Date('2024-07-15T09:00:00'), fechaFin: new Date('2024-07-18T23:59:59'), estado: 'finalizado', destacado: false, tipo: 'flash', maxComprasPorColaborador: 1, totalVisitas: 3100, totalCompras: 645, montoTotal: 189200000, colaboradoresUnicos: 1290 },
-      { id: 'ev6', empresaId: 'e4', nombre: 'Falabella Invierno Flash', descripcion: 'Lo mejor de la moda de invierno con descuentos de hasta 60%.', fechaInicio: new Date('2024-06-10T09:00:00'), fechaFin: new Date('2024-06-13T23:59:59'), estado: 'finalizado', destacado: false, tipo: 'flash', maxComprasPorColaborador: 3, totalVisitas: 2890, totalCompras: 934, montoTotal: 87600000, colaboradoresUnicos: 1560 },
+      { id: 'ev1', empresaId: 'e3', nombre: 'Samsung Tech Flash #9', descripcion: 'Descuentos exclusivos de hasta 45% en los mejores productos Samsung. Televisores, tablets, smartphones y más.', banner: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=1200&q=80', fechaInicio: new Date('2024-11-10T09:00:00'), fechaFin: new Date('2024-11-13T23:59:59'), estado: 'activo', destacado: true, tipo: 'flash', maxComprasPorColaborador: 2, totalVisitas: 2840, totalCompras: 512, montoTotal: 198400000, colaboradoresUnicos: 1028 },
+      { id: 'ev2', empresaId: 'e4', nombre: 'Falabella Moda & Hogar', descripcion: 'Liquidación de temporada en moda, hogar y electrodomésticos. Hasta 50% de descuento en miles de productos.', banner: 'https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?w=1200&q=80', fechaInicio: new Date('2024-11-08T09:00:00'), fechaFin: new Date('2024-11-16T23:59:59'), estado: 'activo', destacado: true, tipo: 'flash', maxComprasPorColaborador: 3, totalVisitas: 4210, totalCompras: 1291, montoTotal: 124800000, colaboradoresUnicos: 2340 },
+      { id: 'ev3', empresaId: 'e5', nombre: 'Cencosud Gourmet Week', descripcion: 'Semana especial con los mejores productos gourmet, vinos premium y alimentos de alta gama.', banner: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=1200&q=80', fechaInicio: new Date('2024-11-20T09:00:00'), fechaFin: new Date('2024-11-25T23:59:59'), estado: 'proximo', destacado: true, tipo: 'flash', maxComprasPorColaborador: 5 },
+      { id: 'ev4', empresaId: 'e6', nombre: 'Latam Travel Benefits', descripcion: 'Beneficios exclusivos en pasajes, upgrades y servicios premium para colaboradores.', banner: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1200&q=80', fechaInicio: new Date('2024-12-01T09:00:00'), fechaFin: new Date('2024-12-05T23:59:59'), estado: 'proximo', destacado: false, tipo: 'flash', maxComprasPorColaborador: 2 },
+      { id: 'ev5', empresaId: 'e3', nombre: 'Samsung Back to School', descripcion: 'Notebooks, tablets y accesorios Samsung para el regreso a clases.', banner: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=1200&q=80', fechaInicio: new Date('2024-07-15T09:00:00'), fechaFin: new Date('2024-07-18T23:59:59'), estado: 'finalizado', destacado: false, tipo: 'flash', maxComprasPorColaborador: 1, totalVisitas: 3100, totalCompras: 645, montoTotal: 189200000, colaboradoresUnicos: 1290 },
+      { id: 'ev6', empresaId: 'e4', nombre: 'Falabella Invierno Flash', descripcion: 'Lo mejor de la moda de invierno con descuentos de hasta 60%.', banner: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80', fechaInicio: new Date('2024-06-10T09:00:00'), fechaFin: new Date('2024-06-13T23:59:59'), estado: 'finalizado', destacado: false, tipo: 'flash', maxComprasPorColaborador: 3, totalVisitas: 2890, totalCompras: 934, montoTotal: 87600000, colaboradoresUnicos: 1560 },
     ],
   });
 
   await prisma.eventoEmpresa.createMany({
     data: [
-      // Samsung Tech Flash — invita a todas las empresas
       { eventoId: 'ev1', empresaId: 'e1' }, { eventoId: 'ev1', empresaId: 'e2' },
       { eventoId: 'ev1', empresaId: 'e4' }, { eventoId: 'ev1', empresaId: 'e5' }, { eventoId: 'ev1', empresaId: 'e6' },
-      // Falabella Moda
       { eventoId: 'ev2', empresaId: 'e1' }, { eventoId: 'ev2', empresaId: 'e2' },
       { eventoId: 'ev2', empresaId: 'e3' }, { eventoId: 'ev2', empresaId: 'e6' },
-      // Cencosud Gourmet
       { eventoId: 'ev3', empresaId: 'e1' }, { eventoId: 'ev3', empresaId: 'e2' },
       { eventoId: 'ev3', empresaId: 'e3' }, { eventoId: 'ev3', empresaId: 'e4' },
-      // Latam
       { eventoId: 'ev4', empresaId: 'e1' }, { eventoId: 'ev4', empresaId: 'e2' },
       { eventoId: 'ev4', empresaId: 'e3' }, { eventoId: 'ev4', empresaId: 'e5' },
-      // Finalizados
       { eventoId: 'ev5', empresaId: 'e1' }, { eventoId: 'ev5', empresaId: 'e2' }, { eventoId: 'ev5', empresaId: 'e4' },
       { eventoId: 'ev6', empresaId: 'e1' }, { eventoId: 'ev6', empresaId: 'e2' }, { eventoId: 'ev6', empresaId: 'e5' },
     ],
@@ -148,26 +145,37 @@ async function main() {
   await prisma.producto.createMany({
     data: [
       // Samsung
-      { id: 'p1', empresaId: 'e3', eventoId: 'ev1', nombre: 'Smart TV Samsung 65" Neo QLED 4K', descripcion: 'Televisor Neo QLED con tecnología Mini LED, HDR10+ y procesador Neural Quantum.', categoria: 'Electrónica', precioOriginal: 1299990, precioEvento: 779990, descuento: 40, stock: 30, stockMinimo: 3, estado: 'activo', sku: 'SAM-TV65-NEO-001', condicion: 'nuevo', tags: ['televisor', '4K', 'QLED', 'Neo'], visitas: 4200 },
-      { id: 'p2', empresaId: 'e3', eventoId: 'ev1', nombre: 'Samsung Galaxy S24 Ultra 256GB', descripcion: 'Smartphone insignia con S Pen integrado, cámara de 200MP y Snapdragon 8 Gen 3.', categoria: 'Electrónica', precioOriginal: 999990, precioEvento: 649990, descuento: 35, stock: 25, stockMinimo: 3, estado: 'activo', sku: 'SAM-S24U-256-002', condicion: 'nuevo', tags: ['smartphone', 'S Pen', 'premium'], visitas: 5800 },
-      { id: 'p3', empresaId: 'e3', eventoId: 'ev1', nombre: 'Samsung Galaxy Tab S9 FE', descripcion: 'Tablet con pantalla TFT 10.9", procesador Exynos 1380 y S Pen incluido.', categoria: 'Electrónica', precioOriginal: 499990, precioEvento: 299990, descuento: 40, stock: 40, stockMinimo: 5, estado: 'activo', sku: 'SAM-TAB-S9FE-003', condicion: 'nuevo', tags: ['tablet', 'Android', 'S Pen'], visitas: 3100 },
-      { id: 'p4', empresaId: 'e3', eventoId: 'ev1', nombre: 'Samsung Soundbar HW-Q990C', descripcion: 'Barra de sonido 11.1.4ch con Dolby Atmos y tecnología SpaceFit Sound+.', categoria: 'Electrónica', precioOriginal: 799990, precioEvento: 479990, descuento: 40, stock: 15, stockMinimo: 2, estado: 'activo', sku: 'SAM-SB-Q990-004', condicion: 'nuevo', tags: ['audio', 'soundbar', 'Dolby Atmos'], visitas: 2100 },
-      { id: 'p5', empresaId: 'e3', eventoId: 'ev1', nombre: 'Monitor Samsung Odyssey G7 27"', descripcion: 'Monitor gaming curvo QLED 2K 240Hz con tiempo de respuesta de 1ms.', categoria: 'Electrónica', precioOriginal: 599990, precioEvento: 369990, descuento: 38, stock: 20, stockMinimo: 3, estado: 'activo', sku: 'SAM-MON-G7-005', condicion: 'nuevo', tags: ['monitor', 'gaming', 'curvo'], visitas: 2800 },
+      { id: 'p1', empresaId: 'e3', eventoId: 'ev1', nombre: 'Smart TV Samsung 65" Neo QLED 4K', descripcion: 'Televisor Neo QLED con tecnología Mini LED, HDR10+ y procesador Neural Quantum.', categoria: 'Electrónica', precioOriginal: 1299990, precioEvento: 779990, descuento: 40, stock: 30, stockMinimo: 3, imagen: 'https://images.unsplash.com/photo-1593784991095-a205069470b6?w=800&q=80', estado: 'activo', sku: 'SAM-TV65-NEO-001', condicion: 'nuevo', tags: ['televisor', '4K', 'QLED'], visitas: 4200 },
+      { id: 'p2', empresaId: 'e3', eventoId: 'ev1', nombre: 'Samsung Galaxy S24 Ultra 256GB', descripcion: 'Smartphone insignia con S Pen integrado, cámara de 200MP y Snapdragon 8 Gen 3.', categoria: 'Electrónica', precioOriginal: 999990, precioEvento: 649990, descuento: 35, stock: 25, stockMinimo: 3, imagen: 'https://images.unsplash.com/photo-1707210050240-d733cf91ade5?w=800&q=80', estado: 'activo', sku: 'SAM-S24U-256-002', condicion: 'nuevo', tags: ['smartphone', 'S Pen', 'premium'], visitas: 5800 },
+      { id: 'p3', empresaId: 'e3', eventoId: 'ev1', nombre: 'Samsung Galaxy Tab S9 FE', descripcion: 'Tablet con pantalla TFT 10.9", procesador Exynos 1380 y S Pen incluido.', categoria: 'Electrónica', precioOriginal: 499990, precioEvento: 299990, descuento: 40, stock: 40, stockMinimo: 5, imagen: 'https://images.unsplash.com/photo-1589739900243-4b52cd9b104e?w=800&q=80', estado: 'activo', sku: 'SAM-TAB-S9FE-003', condicion: 'nuevo', tags: ['tablet', 'Android'], visitas: 3100 },
+      { id: 'p4', empresaId: 'e3', eventoId: 'ev1', nombre: 'Samsung Soundbar HW-Q990C', descripcion: 'Barra de sonido 11.1.4ch con Dolby Atmos y tecnología SpaceFit Sound+.', categoria: 'Electrónica', precioOriginal: 799990, precioEvento: 479990, descuento: 40, stock: 15, stockMinimo: 2, imagen: 'https://images.unsplash.com/photo-1545454675-3531b543be5d?w=800&q=80', estado: 'activo', sku: 'SAM-SB-Q990-004', condicion: 'nuevo', tags: ['audio', 'soundbar'], visitas: 2100 },
+      { id: 'p5', empresaId: 'e3', eventoId: 'ev1', nombre: 'Monitor Samsung Odyssey G7 27"', descripcion: 'Monitor gaming curvo QLED 2K 240Hz con tiempo de respuesta de 1ms.', categoria: 'Electrónica', precioOriginal: 599990, precioEvento: 369990, descuento: 38, stock: 20, stockMinimo: 3, imagen: 'https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=800&q=80', estado: 'activo', sku: 'SAM-MON-G7-005', condicion: 'nuevo', tags: ['monitor', 'gaming'], visitas: 2800 },
       // Falabella
-      { id: 'p6', empresaId: 'e4', eventoId: 'ev2', nombre: 'Juego de Living 3 Piezas Premium', descripcion: 'Sofá de 3 cuerpos + 2 sillones tapizados en tela antimanchas. Colores disponibles: gris, beige, azul.', categoria: 'Hogar', precioOriginal: 599990, precioEvento: 349990, descuento: 42, stock: 12, stockMinimo: 2, estado: 'activo', sku: 'FAL-LIV-3P-001', condicion: 'nuevo', tags: ['muebles', 'living', 'sofá'], visitas: 3400 },
-      { id: 'p7', empresaId: 'e4', eventoId: 'ev2', nombre: 'Chaqueta North Face Thermoball', descripcion: 'Chaqueta acolchada con relleno sintético Thermoball, ideal para temperaturas bajo cero.', categoria: 'Moda', precioOriginal: 149990, precioEvento: 74990, descuento: 50, stock: 60, stockMinimo: 10, estado: 'activo', sku: 'FAL-NF-THERM-002', condicion: 'nuevo', tags: ['moda', 'outdoor', 'invierno', 'North Face'], visitas: 4100 },
-      { id: 'p8', empresaId: 'e4', eventoId: 'ev2', nombre: 'Robot Aspirador Roomba i7+', descripcion: 'Aspirador robot con vaciado automático, navegación inteligente y control por app.', categoria: 'Hogar', precioOriginal: 499990, precioEvento: 299990, descuento: 40, stock: 18, stockMinimo: 2, estado: 'activo', sku: 'FAL-ROOM-I7-003', condicion: 'nuevo', tags: ['electrodoméstico', 'robot', 'limpieza'], visitas: 5200 },
-      { id: 'p9', empresaId: 'e4', eventoId: 'ev2', nombre: 'Cafetera Nespresso Vertuo Next', descripcion: 'Cafetera de cápsulas con tecnología Centrifusion para cafés perfectos.', categoria: 'Hogar', precioOriginal: 89990, precioEvento: 49990, descuento: 44, stock: 85, stockMinimo: 10, estado: 'activo', sku: 'FAL-NESP-VN-004', condicion: 'nuevo', tags: ['cocina', 'café', 'Nespresso'], visitas: 6800 },
-      { id: 'p10', empresaId: 'e4', eventoId: 'ev2', nombre: 'Zapatillas Nike Air Max 270', descripcion: 'Zapatillas lifestyle con cámara de aire Max de 270° para máxima comodidad.', categoria: 'Moda', precioOriginal: 99990, precioEvento: 59990, descuento: 40, stock: 120, stockMinimo: 15, estado: 'activo', sku: 'FAL-NIK-AM270-005', condicion: 'nuevo', tags: ['zapatillas', 'Nike', 'lifestyle'], visitas: 7200 },
-      // Cencosud Gourmet (próximo)
-      { id: 'p11', empresaId: 'e5', eventoId: 'ev3', nombre: 'Pack Vinos Premium Santa Rita 6 botellas', descripcion: 'Selección de 6 vinos premium de la línea Medalla Real de Santa Rita.', categoria: 'Alimentos', precioOriginal: 89990, precioEvento: 59990, descuento: 33, stock: 200, stockMinimo: 20, estado: 'activo', sku: 'CEN-VIN-SR-001', condicion: 'nuevo', tags: ['vinos', 'premium', 'gourmet'], visitas: 1200 },
-      { id: 'p12', empresaId: 'e5', eventoId: 'ev3', nombre: 'Parrilla Weber Master-Touch 57cm', descripcion: 'Parrilla a carbón premium con tapa, sistema de ventilación y accesorio para briquetas.', categoria: 'Hogar', precioOriginal: 249990, precioEvento: 164990, descuento: 34, stock: 35, stockMinimo: 5, estado: 'activo', sku: 'CEN-WEB-MT57-002', condicion: 'nuevo', tags: ['parrilla', 'Weber', 'premium'], visitas: 890 },
-      // Latam (próximo)
-      { id: 'p13', empresaId: 'e6', eventoId: 'ev4', nombre: 'Upgrade Business Class Latam', descripcion: 'Upgrade a Business Class en vuelos nacionales e internacionales seleccionados.', categoria: 'Otro', precioOriginal: 199990, precioEvento: 99990, descuento: 50, stock: 100, stockMinimo: 10, estado: 'activo', sku: 'LAT-UPG-BC-001', condicion: 'nuevo', tags: ['viaje', 'business', 'upgrade'], visitas: 3400 },
+      { id: 'p6', empresaId: 'e4', eventoId: 'ev2', nombre: 'Juego de Living 3 Piezas Premium', descripcion: 'Sofá de 3 cuerpos + 2 sillones tapizados en tela antimanchas.', categoria: 'Hogar', precioOriginal: 599990, precioEvento: 349990, descuento: 42, stock: 12, stockMinimo: 2, imagen: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80', estado: 'activo', sku: 'FAL-LIV-3P-001', condicion: 'nuevo', tags: ['muebles', 'living'], visitas: 3400 },
+      { id: 'p7', empresaId: 'e4', eventoId: 'ev2', nombre: 'Chaqueta North Face Thermoball', descripcion: 'Chaqueta acolchada con relleno sintético Thermoball, ideal para temperaturas bajo cero.', categoria: 'Moda', precioOriginal: 149990, precioEvento: 74990, descuento: 50, stock: 60, stockMinimo: 10, imagen: 'https://images.unsplash.com/photo-1539185441755-769473a23570?w=800&q=80', estado: 'activo', sku: 'FAL-NF-THERM-002', condicion: 'nuevo', tags: ['moda', 'outdoor'], visitas: 4100 },
+      { id: 'p8', empresaId: 'e4', eventoId: 'ev2', nombre: 'Robot Aspirador Roomba i7+', descripcion: 'Aspirador robot con vaciado automático, navegación inteligente y control por app.', categoria: 'Hogar', precioOriginal: 499990, precioEvento: 299990, descuento: 40, stock: 18, stockMinimo: 2, imagen: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80', estado: 'activo', sku: 'FAL-ROOM-I7-003', condicion: 'nuevo', tags: ['electrodoméstico', 'robot'], visitas: 5200 },
+      { id: 'p9', empresaId: 'e4', eventoId: 'ev2', nombre: 'Cafetera Nespresso Vertuo Next', descripcion: 'Cafetera de cápsulas con tecnología Centrifusion para cafés perfectos.', categoria: 'Hogar', precioOriginal: 89990, precioEvento: 49990, descuento: 44, stock: 85, stockMinimo: 10, imagen: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80', estado: 'activo', sku: 'FAL-NESP-VN-004', condicion: 'nuevo', tags: ['cocina', 'café'], visitas: 6800 },
+      { id: 'p10', empresaId: 'e4', eventoId: 'ev2', nombre: 'Zapatillas Nike Air Max 270', descripcion: 'Zapatillas lifestyle con cámara de aire Max de 270° para máxima comodidad.', categoria: 'Moda', precioOriginal: 99990, precioEvento: 59990, descuento: 40, stock: 120, stockMinimo: 15, imagen: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&q=80', estado: 'activo', sku: 'FAL-NIK-AM270-005', condicion: 'nuevo', tags: ['zapatillas', 'Nike'], visitas: 7200 },
+      // Cencosud
+      { id: 'p11', empresaId: 'e5', eventoId: 'ev3', nombre: 'Pack Vinos Premium Santa Rita 6 botellas', descripcion: 'Selección de 6 vinos premium de la línea Medalla Real de Santa Rita.', categoria: 'Alimentos', precioOriginal: 89990, precioEvento: 59990, descuento: 33, stock: 200, stockMinimo: 20, imagen: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=800&q=80', estado: 'activo', sku: 'CEN-VIN-SR-001', condicion: 'nuevo', tags: ['vinos', 'gourmet'], visitas: 1200 },
+      { id: 'p12', empresaId: 'e5', eventoId: 'ev3', nombre: 'Parrilla Weber Master-Touch 57cm', descripcion: 'Parrilla a carbón premium con tapa y sistema de ventilación.', categoria: 'Hogar', precioOriginal: 249990, precioEvento: 164990, descuento: 34, stock: 35, stockMinimo: 5, imagen: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80', estado: 'activo', sku: 'CEN-WEB-MT57-002', condicion: 'nuevo', tags: ['parrilla', 'premium'], visitas: 890 },
+      // Latam
+      { id: 'p13', empresaId: 'e6', eventoId: 'ev4', nombre: 'Upgrade Business Class Latam', descripcion: 'Upgrade a Business Class en vuelos nacionales e internacionales seleccionados.', categoria: 'Otro', precioOriginal: 199990, precioEvento: 99990, descuento: 50, stock: 100, stockMinimo: 10, imagen: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&q=80', estado: 'activo', sku: 'LAT-UPG-BC-001', condicion: 'nuevo', tags: ['viaje', 'business'], visitas: 3400 },
     ],
   });
 
   console.log('✅ Productos creados');
+
+  // ─── Banners ──────────────────────────────────────────────────────────────
+  await prisma.banner.createMany({
+    data: [
+      { titulo: '🔥 Samsung Tech Flash #9', subtitulo: 'Hasta 45% de descuento en televisores, smartphones y tablets Samsung. Solo por tiempo limitado.', imagen: 'https://images.unsplash.com/photo-1610945415295-d9bbf067e59c?w=1400&q=85', colorFondo: '#1428A0', colorTexto: '#ffffff', ctaTexto: 'Ver ofertas Samsung', ctaLink: '/marketplace', orden: 1, activo: true },
+      { titulo: '👗 Falabella Moda & Hogar', subtitulo: 'Liquidación de temporada con hasta 50% off en moda, hogar y electrodomésticos de las mejores marcas.', imagen: 'https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1400&q=85', colorFondo: '#7B2D8B', colorTexto: '#ffffff', ctaTexto: 'Explorar colección', ctaLink: '/marketplace', orden: 2, activo: true },
+      { titulo: '✈️ Beneficios Latam para ti', subtitulo: 'Upgrades a Business Class y beneficios exclusivos en vuelos nacionales e internacionales.', imagen: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1400&q=85', colorFondo: '#E31837', colorTexto: '#ffffff', ctaTexto: 'Ver beneficios', ctaLink: '/marketplace', orden: 3, activo: true },
+    ],
+  });
+
+  console.log('✅ Banners creados');
 
   // ─── Compras ──────────────────────────────────────────────────────────────
   const compras = [
@@ -187,7 +195,6 @@ async function main() {
 
   await prisma.compra.createMany({ data: compras });
 
-  // Actualizar puntos de colaboradores
   const puntosMap = {};
   for (const c of compras) {
     if (!puntosMap[c.colaboradorId]) puntosMap[c.colaboradorId] = 0;
@@ -202,13 +209,10 @@ async function main() {
   console.log('🎉 Seed completado exitosamente');
   console.log('');
   console.log('📋 Usuarios de acceso:');
-  console.log('  admin@nexlink.cl / password  → Super Admin');
-  console.log('  rrhh@bancochile.cl / password → Empresa (Banco de Chile)');
-  console.log('  rrhh@entel.cl / password      → Empresa (Entel)');
-  console.log('  rrhh@samsung.cl / password    → Empresa (Samsung)');
-  console.log('  rrhh@falabella.cl / password  → Empresa (Falabella)');
-  console.log('  maria@bancochile.cl / password → Colaborador (Banco de Chile)');
-  console.log('  pedro@entel.cl / password      → Colaborador (Entel)');
+  console.log('  admin@nexlink.cl / password        → Super Admin');
+  console.log('  rrhh@bancochile.cl / password      → Empresa (Banco de Chile)');
+  console.log('  maria@bancochile.cl / password     → Colaborador (Banco de Chile)');
+  console.log('  pedro@entel.cl / password          → Colaborador (Entel)');
 }
 
 main()
