@@ -17,6 +17,7 @@ const uploadsRoutes = require('./routes/uploads');
 const bannersRoutes = require('./routes/banners');
 const paginaEmpresaRoutes = require('./routes/paginaEmpresa');
 const scraperRoutes = require('./routes/scraper');
+const perfilRoutes = require('./routes/perfil');
 
 const app = express();
 app.set('trust proxy', 1);
@@ -40,6 +41,7 @@ app.use('/api/uploads', uploadsRoutes);
 app.use('/api/banners', bannersRoutes);
 app.use('/api/pagina-empresa', paginaEmpresaRoutes);
 app.use('/api/scraper', scraperRoutes);
+app.use('/api/perfil', perfilRoutes);
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', version: '2.0.0', plataforma: 'NexLink', db: 'PostgreSQL' });

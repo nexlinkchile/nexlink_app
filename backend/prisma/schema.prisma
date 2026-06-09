@@ -76,6 +76,7 @@ model Colaborador {
   empresa      Empresa   @relation(fields: [empresaId], references: [id])
   usuarios     User[]
   compras      Compra[]
+  direcciones  DireccionEnvio[]
 }
 
 model Evento {
@@ -173,6 +174,22 @@ enum Plan {
   enterprise
 }
 
+model DireccionEnvio {
+  id             String      @id @default(cuid())
+  colaboradorId  String
+  alias          String
+  calle          String
+  numero         String
+  depto          String?
+  comuna         String
+  ciudad         String
+  region         String
+  codigoPostal   String?
+  predeterminada Boolean     @default(false)
+  createdAt      DateTime    @default(now())
+
+  colaborador    Colaborador @relation(fields: [colaboradorId], references: [id])
+}
 model Banner {
   id          String   @id @default(cuid())
   titulo      String
