@@ -28,6 +28,7 @@ import MiPagina from './pages/empresa/MiPagina';
 import Marketplace from './pages/colaborador/Marketplace';
 import MisCompras from './pages/colaborador/MisCompras';
 import MarcaPage from './pages/colaborador/MarcaPage';
+import PagoResultado from './pages/colaborador/PagoResultado';
 
 const ROL_HOME = {
   admin: '/admin',
@@ -91,6 +92,7 @@ export default function App() {
             <Route path="/marketplace" element={<ProtectedRoute roles={['colaborador']}><AppLayout><Marketplace /></AppLayout></ProtectedRoute>} />
             <Route path="/marketplace/mis-compras" element={<ProtectedRoute roles={['colaborador']}><AppLayout><MisCompras /></AppLayout></ProtectedRoute>} />
             <Route path="/marketplace/empresa/:empresaId" element={<ProtectedRoute roles={['colaborador']}><AppLayout><MarcaPage /></AppLayout></ProtectedRoute>} />
+            <Route path="/pago/resultado" element={<ProtectedRoute roles={['colaborador']}><AppLayout><PagoResultado /></AppLayout></ProtectedRoute>} />
 
             {/* Perfil — todos los roles */}
             <Route path="/perfil" element={<ProtectedRoute roles={['admin','empresa','colaborador']}><AppLayout><Perfil /></AppLayout></ProtectedRoute>} />
