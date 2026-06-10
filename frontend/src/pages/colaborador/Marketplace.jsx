@@ -34,6 +34,7 @@ function CountdownTimer({ fechaFin }) {
 }
 
 function ProductoCard({ producto, onComprar, estaEnCarrito, yaComprado }) {
+  const navigate = useNavigate();
   const [hover, setHover] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const ahorro = producto.precioOriginal - producto.precioEvento;
@@ -42,7 +43,7 @@ function ProductoCard({ producto, onComprar, estaEnCarrito, yaComprado }) {
     <>
       <div onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)}
         style={{ background: '#fff', borderRadius: 8, border: '1px solid #e5e5e5', overflow: 'hidden', transition: 'all .2s', boxShadow: hover ? '0 4px 20px rgba(0,0,0,.12)' : 'none', position: 'relative', cursor: 'pointer' }}
-        onClick={() => setShowModal(true)}>
+        onClick={() => navigate('/marketplace/producto/' + producto.id)}>
         {disabled && (
           <div style={{ position: 'absolute', inset: 0, background: 'rgba(255,255,255,.85)', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 6 }}>
             <CheckCircle size={28} color="#10B981" />
@@ -386,7 +387,9 @@ export default function Marketplace() {
       setBanners(bannersRes.data);
       setEventos(evRes.data.filter(e => e.estado === 'activo'));
       setProductosHome(prRes.data.productos);
-      setMisCompras(comprasRes.data.map(c => c.productoId));
+      const ids = comprasRes.data.map(c => c.productoId);
+      setMisCompras(ids);
+      localStorage.setItem('nexlink_mis_compras', JSON.stringify(ids));
       setEmpresas(empRes.data);
     }).finally(() => setLoading(false));
   };
