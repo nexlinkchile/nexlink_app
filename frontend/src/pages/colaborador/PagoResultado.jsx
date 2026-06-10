@@ -37,6 +37,7 @@ export default function PagoResultado() {
         items = parsed.items || [];
         direccionId = parsed.direccionId || null;
         sessionStorage.removeItem('nexlink_pago');
+      localStorage.removeItem('nexlink_carrito');
       }
     } catch {}
 

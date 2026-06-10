@@ -349,7 +349,10 @@ export default function Marketplace() {
   const [eventos, setEventos] = useState([]);
   const [productosHome, setProductosHome] = useState([]);
   const [misCompras, setMisCompras] = useState([]);
-  const [carrito, setCarrito] = useState([]);
+  const [carrito, setCarrito] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('nexlink_carrito') || '[]'); }
+    catch { return []; }
+  });
   const [showCarrito, setShowCarrito] = useState(false);
   const [loading, setLoading] = useState(true);
   const [bannerIdx, setBannerIdx] = useState(0);
@@ -419,6 +422,10 @@ export default function Marketplace() {
   const yaComprado = id => misCompras.includes(id);
   const agregarCarrito = p => { if (!estaEnCarrito(p.id) && !yaComprado(p.id)) setCarrito(c => [...c, p]); };
   const removerCarrito = id => setCarrito(c => c.filter(i => i.id !== id));
+
+  useEffect(() => {
+    localStorage.setItem('nexlink_carrito', JSON.stringify(carrito));
+  }, [carrito]);
 
   const ofertas = [...productosHome].sort((a, b) => b.descuento - a.descuento).slice(0, 8);
   const destacados = [...productosHome].sort((a, b) => b.visitas - a.visitas).slice(0, 10);
